@@ -146,19 +146,18 @@
       };
 
       homeConfigurations = {
-        server = mkHomeConfig {
-          username = "kclejeune";
+        laptop = mkHomeConfig {
+          username = "jesse";
           extraModules = [ ./profiles/home-manager/personal.nix ];
-        };
-        workServer = mkHomeConfig {
-          username = "lejeukc1";
-          extraModules = [ ./profiles/home-manager/work.nix ];
         };
         multipass = mkHomeConfig {
           username = "ubuntu";
           extraModules = [ ./profiles/home-manager/personal.nix ];
         };
       };
+
+      laptop = self.homeConfigurations.laptop.activationPackage;
+      multipass = self.homeConfigurations.multipass.activationPackage;
     } //
     # add a devShell to this flake
     eachDefaultSystem (system:
