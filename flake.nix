@@ -104,9 +104,7 @@
         { username
         , system ? "x86_64-linux"
         , baseModules ? [
-            ./modules/home-manager/core.nix
-            ./modules/home-manager/dotfiles
-            ./modules/home-manager/home.nix
+            ./modules/home-manager
           ]
         , extraModules ? [ ]
         }: homeManagerConfiguration rec {
@@ -124,10 +122,16 @@
     {
       darwinConfigurations = {
         randall = mkDarwinConfig {
-          extraModules = [ ./profiles/personal.nix ];
+          extraModules = [
+            ./profiles/personal.nix
+            ./modules/darwin/apps.nix
+          ];
         };
         work = mkDarwinConfig {
-          extraModules = [ ./profiles/work.nix ];
+          extraModules = [
+            ./profiles/work.nix
+            ./modules/darwin/apps-minimal.nix
+          ];
         };
       };
 

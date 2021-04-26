@@ -11,8 +11,14 @@ let
     (${sysDoNixos}) || (${sysDoDarwin})
   '');
 in
+
 {
-  imports = [ ./core.nix ];
+  imports = [ ./vim ./cli ./kitty ./dotfiles ./git.nix ];
+
+  programs.home-manager = {
+    enable = true;
+    path = "${config.home.homeDirectory}/.nixpkgs/modules/home-manager";
+  };
 
   home = {
     # This value determines the Home Manager release that your
@@ -41,6 +47,7 @@ in
       cachix
       coreutils-full
       curl
+      # dust
       fd
       gawk
       ghc
@@ -48,9 +55,10 @@ in
       gnugrep
       gnupg
       gnused
-      go
       htop
       httpie
+      curlie
+      hyperfine
       jq
       kotlin
       neofetch
@@ -68,6 +76,7 @@ in
       speedtest-cli
       sysdo
       tectonic
+      tealdeer
       texlive.combined.scheme-full
       youtube-dl
     ];
