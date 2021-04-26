@@ -8,7 +8,7 @@
   };
 
   user = {
-    description = "Kennan LeJeune";
+    description = "Jesse Pledger";
     home = "${
         if pkgs.stdenvNoCC.isDarwin then "/Users" else "/home"
       }/${config.user.name}";
@@ -43,6 +43,7 @@
       fzf
       ripgrep
       zsh
+      exa
 
       # languages
       python3
