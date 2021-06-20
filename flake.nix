@@ -135,7 +135,7 @@
             name = system;
             value = {
               nixos = self.nixosConfigurations.phil.config.system.build.toplevel;
-              server = self.homeConfigurations.server.activationPackage;
+              server = self.homeConfigurations.personal.activationPackage;
             };
           })
           lib.platforms.linux)
