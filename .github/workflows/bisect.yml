@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         configuration:
-          - darwinConfigurations.randall.config.system.build.toplevel
+          - darwinConfigurations.jesse.config.system.build.toplevel
     steps:
     - uses: actions/checkout@v2.3.4
       with:
