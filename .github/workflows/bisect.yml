@@ -10,7 +10,7 @@ jobs:
       matrix:
         configuration:
           - nixosConfigurations.phil.config.system.build.toplevel
-          - homeManagerConfigurations.server.activationPackage
+          - homeManagerConfigurations.personal.activationPackage
     steps:
     - uses: actions/checkout@v2.3.4
       with:
