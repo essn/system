@@ -9,6 +9,7 @@
       "keepingyouawake"
       "keybase"
       "lastpass"
+      "kitty"
       "visual-studio-code"
     ];
   };
