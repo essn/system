@@ -26,11 +26,11 @@
     ];
 
     binaryCaches = [
-      "https://kclejeune.cachix.org"
+      "https://essn.cachix.org"
       "https://nix-community.cachix.org/"
     ];
     binaryCachePublicKeys = [
-      "kclejeune.cachix.org-1:fOCrECygdFZKbMxHClhiTS6oowOkJ/I/dh9q9b1I4ko="
+      "essn.cachix.org-1:KXsLMZMuR6WtbBv9qz30/Cniyqig9nMtbkhkrcMjiCrBT31F7EdmuEpD85pCH/6v8ak/4uJJOcsbKGz1mdnkgA=="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
 
