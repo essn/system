@@ -25,7 +25,7 @@ These modules are imported into all other configurations in the common module si
 
 ```nix
 { config, pkgs, ... }: {
-  home-manager.users.kclejeune = import ./home-manager/home.nix;
+  home-manager.users.jesse = import ./home-manager/home.nix;
 }
 ```
 
