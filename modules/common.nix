@@ -1,5 +1,5 @@
 { inputs, config, lib, pkgs, ... }: {
-  imports = [ ./primary.nix ./nixpkgs.nix ];
+  imports = [ ./primary.nix ./nixpkgs.nix ./overlays.nix ];
 
   programs.zsh = {
     enable = true;
@@ -20,6 +20,7 @@
 
   # let nix manage home-manager profiles and use global nixpkgs
   home-manager = {
+    extraSpecialArgs = { inherit inputs lib; };
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
@@ -57,8 +58,5 @@
     shells = with pkgs; [ bash zsh fish ];
   };
 
-  fonts = {
-    enableFontDir = true;
-    fonts = with pkgs; [ jetbrains-mono iosevka ];
-  };
+  fonts.fonts = with pkgs; [ jetbrains-mono iosevka ];
 }

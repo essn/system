@@ -1,10 +1,10 @@
-{ ... }: {
+{ lib, ... }: {
   imports = [
     # ./coc
     # ./lua-lsp # build failure
     ./bash
     ./css
-    # ./fzf
+    ./fzf
     ./go-lsp
     ./html
     ./json
@@ -16,11 +16,12 @@
     ./nvim-lspconfig
     ./pyright-lsp
     ./rnix-lsp
-    ./skim
+    # ./skim
     ./svelte-lsp
     ./theme
     ./treesitter
     ./typescript-lsp
+    ./vim-closetag
     ./vimscript-lsp
     ./vsnip
     ./vue-lsp

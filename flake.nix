@@ -27,7 +27,7 @@
       flake = false;
     };
     darwin = {
-      url = "github:kclejeune/nix-darwin/fix-broken-cmd";
+      url = "github:kclejeune/nix-darwin/backup-etc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -53,12 +53,16 @@
     , ...
     }:
     let
+      supportedSystems = [ "x86_64-darwin" "x86_64-linux" ];
       overlays = [ inputs.neovim-nightly-overlay.overlay ];
+      lib = nixpkgs.lib.extend
+        (final: prev: (import ./lib final) // home-manager.lib);
 
       inherit (darwin.lib) darwinSystem;
       inherit (nixpkgs.lib) nixosSystem;
       inherit (home-manager.lib) homeManagerConfiguration;
-      inherit (flake-utils.lib) eachDefaultSystem;
+      inherit (flake-utils.lib) eachDefaultSystem eachSystem;
+      inherit (builtins) listToAttrs map;
 
       # generate a base darwin configuration with the
       # specified hostname, overlays, and any extraModules applied
@@ -69,13 +73,12 @@
             ./modules/darwin
           ]
         , extraModules ? [ ]
-        }: darwinSystem {
+        }:
+        darwinSystem {
           # system = "x86_64-darwin";
-          modules =
-            baseModules ++
-            extraModules ++
-            [{ nixpkgs.overlays = overlays; }];
-          specialArgs = { inherit inputs nixpkgs; };
+          modules = baseModules ++ extraModules
+            ++ [{ nixpkgs.overlays = overlays; }];
+          specialArgs = { inherit inputs lib; };
         };
 
       # generate a base nixos configuration with the
@@ -88,14 +91,12 @@
             ./modules/nixos
           ]
         , extraModules ? [ ]
-        }: nixosSystem {
+        }:
+        nixosSystem {
           inherit system;
-          modules =
-            baseModules ++
-            hardwareModules ++
-            extraModules ++
-            [{ nixpkgs.overlays = overlays; }];
-          specialArgs = { inherit inputs nixpkgs; };
+          modules = baseModules ++ hardwareModules ++ extraModules
+            ++ [{ nixpkgs.overlays = overlays; }];
+          specialArgs = { inherit inputs lib; };
         };
 
       # generate a home-manager configuration usable on any unix system
@@ -103,35 +104,50 @@
       mkHomeConfig =
         { username
         , system ? "x86_64-linux"
-        , baseModules ? [
-            ./modules/home-manager
-          ]
+        , baseModules ? [ ./modules/home-manager ]
         , extraModules ? [ ]
-        }: homeManagerConfiguration rec {
+        }:
+        homeManagerConfiguration rec {
           inherit system username;
           homeDirectory = "/home/${username}";
-          extraSpecialArgs = { inherit inputs nixpkgs; };
+          extraSpecialArgs = { inherit inputs lib; };
           configuration = {
-            imports =
-              baseModules ++
-              extraModules ++
-              [{ nixpkgs.overlays = overlays; }];
+            imports = baseModules ++ extraModules
+              ++ [{ nixpkgs.overlays = overlays; }];
           };
         };
     in
     {
+      checks = listToAttrs (
+        # darwin checks
+        (map
+          (system: {
+            name = system;
+            value = {
+              darwin =
+                self.darwinConfigurations.randall.config.system.build.toplevel;
+            };
+          })
+          lib.platforms.darwin) ++
+        # linux checks
+        (map
+          (system: {
+            name = system;
+            value = {
+              nixos = self.nixosConfigurations.phil.config.system.build.toplevel;
+              server = self.homeConfigurations.server.activationPackage;
+            };
+          })
+          lib.platforms.linux)
+      );
+
       darwinConfigurations = {
         randall = mkDarwinConfig {
-          extraModules = [
-            ./profiles/personal.nix
-            ./modules/darwin/apps.nix
-          ];
+          extraModules = [ ./profiles/personal.nix ./modules/darwin/apps.nix ];
         };
         work = mkDarwinConfig {
-          extraModules = [
-            ./profiles/work.nix
-            ./modules/darwin/apps-minimal.nix
-          ];
+          extraModules =
+            [ ./profiles/work.nix ./modules/darwin/apps-minimal.nix ];
         };
       };
 
@@ -160,7 +176,7 @@
       multipass = self.homeConfigurations.multipass.activationPackage;
     } //
     # add a devShell to this flake
-    eachDefaultSystem (system:
+    eachSystem supportedSystems (system:
     let
       pkgs = import nixpkgs {
         inherit system;
@@ -174,13 +190,11 @@
       sysdo = pkgs.writeShellScriptBin "sysdo" ''
         cd $DEVSHELL_ROOT && ${pyEnv}/bin/python3 bin/do.py $@
       '';
-      fmt = pkgs.writeShellScriptBin "treefmt" ''
-        ${treefmt.defaultPackage.${system}}/bin/treefmt -q $@
-      '';
+      fmt = treefmt.defaultPackage.${system};
     in
     {
       devShell = pkgs.devshell.mkShell {
-        packages = with pkgs; [ nixBin pyEnv ];
+        packages = with pkgs; [ nixBin pyEnv fmt ];
         commands = [
           {
             name = "sysdo";
@@ -190,9 +204,9 @@
           }
           {
             help = "Format the entire code tree";
-            name = "treefmt";
+            name = "fmt";
+            command = "treefmt -q";
             category = "utilities";
-            package = fmt;
           }
         ];
       };
