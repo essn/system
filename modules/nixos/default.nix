@@ -9,7 +9,7 @@
       - JOB: intercept -g $DEVNODE | caps2esc -m 1 | uinput -d $DEVNODE
         DEVICE:
           EVENTS:
-            EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
+            EV_KEY: [KEY_CAPSLOCK, KEY_LEFTCTRL]
     '';
   };
 
@@ -45,7 +45,7 @@
     };
   };
 
-  networking.hostName = "Phil"; # Define your hostname.
+  networking.hostName = "jesse"; # Define your hostname.
   networking.networkmanager.enable = true;
 
   # Use the GRUB 2 boot loader.
