@@ -23,6 +23,7 @@
       "karabiner-elements"
       "keepingyouawake"
       "keybase"
+      "kitty"
       "lastpass"
       "lulu"
       "nordvpn"
