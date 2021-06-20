@@ -8,7 +8,7 @@
       "https://cache.nixos.org"
     ];
     trusted-public-keys = [
-      "essn.cachix.org-1:KXsLMZMuR6WtbBv9qz30/Cniyqig9nMtbkhkrcMjiCrBT31F7EdmuEpD85pCH/6v8ak/4uJJOcsbKGz1mdnkgA=="
+      "essn.cachix.org-1:wU99RexHZrhKQ/OaQh/+r/GpP+LiSTnLGyhs9ZnZ5IA="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
