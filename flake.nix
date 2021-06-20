@@ -3,12 +3,12 @@
 
   nixConfig = {
     substituters = [
-      "https://kclejeune.cachix.org"
+      "https://essn.cachix.org"
       "https://nix-community.cachix.org/"
       "https://cache.nixos.org"
     ];
     trusted-public-keys = [
-      "kclejeune.cachix.org-1:fOCrECygdFZKbMxHClhiTS6oowOkJ/I/dh9q9b1I4ko="
+      "essn.cachix.org-1:KXsLMZMuR6WtbBv9qz30/Cniyqig9nMtbkhkrcMjiCrBT31F7EdmuEpD85pCH/6v8ak/4uJJOcsbKGz1mdnkgA=="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
@@ -125,7 +125,7 @@
             name = system;
             value = {
               darwin =
-                self.darwinConfigurations.randall.config.system.build.toplevel;
+                self.darwinConfigurations.jesse.config.system.build.toplevel;
             };
           })
           lib.platforms.darwin) ++
@@ -142,7 +142,7 @@
       );
 
       darwinConfigurations = {
-        randall = mkDarwinConfig {
+        jesse = mkDarwinConfig {
           extraModules = [ ./profiles/personal.nix ./modules/darwin/apps.nix ];
         };
         work = mkDarwinConfig {
@@ -162,7 +162,7 @@
       };
 
       homeConfigurations = {
-        laptop = mkHomeConfig {
+        personal = mkHomeConfig {
           username = "jesse";
           extraModules = [ ./profiles/home-manager/personal.nix ];
         };
@@ -172,8 +172,9 @@
         };
       };
 
-      laptop = self.homeConfigurations.laptop.activationPackage;
-      multipass = self.homeConfigurations.multipass.activationPackage;
+      # TODO: Do I still need this work around?
+      # personalHomeConfig = self.homeConfigurations.personal.activationPackage;
+      # multipassHomeConfig = self.homeConfigurations.multipass.activationPackage;
     } //
     # add a devShell to this flake
     eachSystem supportedSystems (system:
