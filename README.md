@@ -1,6 +1,7 @@
-# Nix System Configuration
+# Nix System Configuration for Essn
+Credit goes to: https://github.com/kclejeune/system
 
-![system build](https://github.com/kclejeune/system/workflows/system%20build/badge.svg)
+![system build](https://github.com/essn/system/workflows/system%20build/badge.svg)
 
 This repository manages system configurations for all of my
 macOS, nixOS, and linux machines.
@@ -57,7 +58,7 @@ Note that this step is naturally skipped on NixOS since `nix` is the package man
 Follow the installation instructions, then run
 
 ```bash
-sudo nixos-install --flake github:kclejeune/system#phil
+sudo nixos-install --flake github:essn/system#phil
 ```
 
 ### Darwin/Linux
@@ -65,7 +66,7 @@ sudo nixos-install --flake github:kclejeune/system#phil
 Clone this repository into `~/.nixpkgs` with
 
 ```bash
-git clone https://github.com/kclejeune/system ~/.nixpkgs
+git clone https://github.com/essn/system ~/.nixpkgs
 ```
 
 You can bootstrap a new nix-darwin system using
