@@ -1,8 +1,14 @@
 { config, lib, pkgs, ... }: {
   homebrew = {
     casks = [
+      "amethyst"
+      "brave-browser"
+      "docker"
+      "iterm2"
       "karabiner-elements"
-      "kitty"
+      "keepingyouawake"
+      "keybase"
+      "lastpass"
       "visual-studio-code"
     ];
   };
