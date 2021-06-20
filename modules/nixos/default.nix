@@ -13,6 +13,12 @@
     '';
   };
 
+  # manually disable this to resolve https://github.com/NixOS/nixos-hardware/issues/260
+  # TODO: resolve this later
+  services.power-profiles-daemon.enable = false;
+
+  fonts = { fontDir.enable = true; };
+
   services.syncthing = {
     enable = true;
     user = config.user.name;
@@ -21,11 +27,7 @@
     dataDir = config.user.home;
   };
 
-  environment.systemPackages = with pkgs; [
-    vscode
-    firefox
-    gnome3.gnome-tweaks
-  ];
+  environment.systemPackages = with pkgs; [ vscode firefox gnome.gnome-tweaks ];
 
   hm = { pkgs, ... }: { imports = [ ../home-manager/gnome ]; };
 
@@ -106,23 +108,25 @@
   hardware.pulseaudio.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    # services.xserver.xkbOptions = "eurosign:e";
 
-  # Enable touchpad support.
-  services.xserver.libinput.enable = true;
+    # Enable touchpad support.
+    libinput.enable = true;
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.displayManager = {
-    gdm = {
-      enable = true;
-      wayland = true;
+    # Enable the KDE Desktop Environment.
+    # services.xserver.displayManager.sddm.enable = true;
+    # services.xserver.desktopManager.plasma5.enable = true;
+    displayManager = {
+      gdm = {
+        enable = true;
+        wayland = true;
+      };
     };
+    desktopManager.gnome.enable = true;
   };
-  services.xserver.desktopManager.gnome3.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

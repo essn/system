@@ -3,22 +3,31 @@ let
   functions = builtins.readFile ./functions.sh;
   useSkim = false;
   useFzf = !useSkim;
-  fuzzyCommands = {
-    changeDirWidgetCommand = "${pkgs.fd}/bin/fd --type d";
-    fileWidgetCommand = "${pkgs.fd}/bin/fd --type f";
-    fileWidgetOptions = [ "--preview '${pkgs.bat}/bin/bat --color=always --plain {}'" ];
-    changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
-  };
-  aliases = {
-    cat = "bat";
-  };
+  fuzz =
+    let fd = "${pkgs.fd}/bin/fd";
+    in
+    rec {
+      defaultCommand = "${fd} -H --type f";
+      defaultOptions = [ "--height 50%" "--border" ];
+      fileWidgetCommand = "${defaultCommand}";
+      fileWidgetOptions = [
+        "--preview '${pkgs.bat}/bin/bat --color=always --plain --line-range=:200 {}'"
+      ];
+      changeDirWidgetCommand = "${fd} --type d";
+      changeDirWidgetOptions =
+        [ "--preview '${pkgs.tree}/bin/tree -C {} | head -200'" ];
+    };
+  aliases = { cat = "bat"; };
 in
 {
   home.packages = with pkgs; [ tree ];
   programs = {
     direnv = {
       enable = true;
-      enableNixDirenvIntegration = true;
+      nix-direnv = {
+        enable = true;
+        enableFlakes = true;
+      };
       stdlib = ''
         # stolen from @i077; store .direnv in cache instead of project dir
         declare -A direnv_layout_dirs
@@ -35,17 +44,19 @@ in
       enableBashIntegration = useSkim;
       enableZshIntegration = useSkim;
       enableFishIntegration = useSkim;
-    } // fuzzyCommands;
+    } // fuzz;
     fzf = {
       enable = true;
       enableBashIntegration = useFzf;
       enableZshIntegration = useFzf;
       enableFishIntegration = useFzf;
-      defaultOptions = [ "--height 60%" "--border" ];
-    } // fuzzyCommands;
+    } // fuzz;
     bat = {
       enable = true;
-      config = { theme = "TwoDark"; };
+      config = {
+        theme = "TwoDark";
+        color = "always";
+      };
     };
     jq.enable = true;
     htop.enable = true;
@@ -66,13 +77,10 @@ in
     bash = {
       enable = true;
       shellAliases = aliases;
-      initExtra = ''
-        ${functions}
-      '';
     };
     zsh =
       let
-        mkZshPlugin = { pkg, file ? "${pkg.pname}.zsh" }: rec {
+        mkZshPlugin = { pkg, file ? "${pkg.pname}.plugin.zsh" }: rec {
           name = pkg.pname;
           src = pkg.src;
           inherit file;
@@ -80,7 +88,6 @@ in
       in
       {
         enable = true;
-        enableCompletion = true;
         autocd = true;
         dotDir = ".config/zsh";
         localVariables = {
@@ -93,17 +100,11 @@ in
         shellAliases = aliases;
         initExtra = ''
           ${functions}
+          unset RPS1
         '';
         plugins = with pkgs; [
-          (mkZshPlugin { pkg = zsh-autopair; file = "autopair.zsh"; })
-          (mkZshPlugin {
-            pkg = zsh-completions;
-            file = "zsh-completions.plugin.zsh";
-          })
-          (mkZshPlugin {
-            pkg = zsh-fzf-tab;
-            file = "fzf-tab.plugin.zsh";
-          })
+          (mkZshPlugin { pkg = zsh-autopair; })
+          (mkZshPlugin { pkg = zsh-completions; })
           (mkZshPlugin { pkg = zsh-autosuggestions; })
           (mkZshPlugin {
             pkg = zsh-fast-syntax-highlighting;
@@ -113,7 +114,7 @@ in
         ];
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" "sudo" "common-aliases" ];
+          plugins = [ "git" "sudo" ];
         };
       };
     zoxide.enable = true;
