@@ -8,8 +8,8 @@
       "karabiner-elements"
       "keepingyouawake"
       "keybase"
-      "lastpass"
       "kitty"
+      "lastpass"
       "visual-studio-code"
     ];
   };
