@@ -45,10 +45,15 @@
       ripgrep
       zsh
       exa
+      
+      # tools
+      direnv
+      ranger
 
       # languages
       python3
       ruby
+      nodejs
     ];
     etc = {
       home-manager.source = "${inputs.home-manager}";
