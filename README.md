@@ -40,7 +40,7 @@ When possible, home-manager functionality is extracted into [./profiles/home-man
 
 ## Installing a Configuration
 
-# Pre Install Steps - Darwin
+### Pre Install Steps - Darwin
 Follow https://github.com/LnL7/nix-darwin
 
 Uncomment the line generated in `.config/darwin-configuration.nix` starting with `#nix.package = nix` and replace with the suggestion from the below issue:
