@@ -40,6 +40,13 @@ When possible, home-manager functionality is extracted into [./profiles/home-man
 
 ## Installing a Configuration
 
+
+##Pre Install Steps - Darwin
+Follow https://github.com/LnL7/nix-darwin
+
+Uncomment the line generated in `.config/darwin-configuration.nix` starting with `#nix.package = nix` and replace with the suggestion from the below issue:
+https://github.com/LnL7/nix-darwin/issues/240#issuecomment-744340796
+
 ### Non-NixOS Prerequisite: Install Nix Package Manager
 
 Run the installer script to perform a multi-user installation
