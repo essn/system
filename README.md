@@ -48,6 +48,8 @@ https://github.com/LnL7/nix-darwin/issues/240#issuecomment-744340796
 
 This will allow required nix flake features.
 
+Install Homebrew `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+
 ### Non-NixOS Prerequisite: Install Nix Package Manager
 
 Run the installer script to perform a multi-user installation
