@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }: {
   homebrew = {
     casks = [
+      "alfred"
       "backblaze"
       "brave-browser"
       "bettertouchtool"
