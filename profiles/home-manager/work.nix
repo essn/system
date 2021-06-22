@@ -6,6 +6,5 @@
     package = pkgs.git;
     userEmail = "jesse@futurefoundry.co";
     userName = "Jesse Pledger";
-    extraConfig = { http.sslVerify = true; };
   };
 }
